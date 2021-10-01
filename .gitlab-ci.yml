@@ -1,0 +1,14 @@
+variables:
+  SCHEDULER_PARAMETERS: "-M escori -q compile -N1 -t 6:00:00"
+
+stages:
+  - build
+
+build_cori:
+  tags: [cori]
+  stage: build
+  script:
+    - module use /global/common/software/nersc/easybuild/cori/21.10/modules/all
+    - module load EasyBuild
+    - source $CI_PROJECT_DIR/setup.sh
+    - eb M4-1.4.19.eb CMake-3.18.4.eb foss-2020b.eb -r
