@@ -47,6 +47,38 @@ siddiq90@login12> ls /global/common/software/nersc/easybuild/sources/b/binutils/
 binutils-2.35.2.tar.gz
 ```
 
+If you see an error with lock files such as error below you can remove the lock directory and try again.
+
+```
+siddiq90@login15> eb easyconfigs/* --robot
+== Temporary log file in case of crash /tmp/eb-kC6a60/easybuild-sP1U3o.log
+== found valid index for /global/common/software/nersc/easybuild/perlmutter/21.10/software/EasyBuild/4.4.2/easybuild/easyconfigs, so using it...
+== found valid index for /global/common/software/nersc/easybuild/perlmutter/21.10/software/EasyBuild/4.4.2/easybuild/easyconfigs, so using it...
+== resolving dependencies ...
+== processing EasyBuild easyconfig /global/common/software/nersc/easybuild/perlmutter/21.10/software/EasyBuild/4.4.2/easybuild/easyconfigs/g/GCCcore/GCCcore-10.2.0.eb
+== building and installing GCCcore/10.2.0...
+== FAILED: Installation ended unsuccessfully (build directory: /global/common/software/nersc/easybuild/perlmutter/21.10/build/GCCcore/10.2.0/system-system): build failed (first 300 chars): Lock /global/common/software/nersc/easybuild/perlmutter/21.10/software/.locks/_global_common_software_nersc_easybuild_perlmutter_21.10_software_GCCcore_10.2.0.lock already exists, aborting! (took 0 secs)
+== Results of the build can be found in the log file(s) /tmp/eb-kC6a60/easybuild-GCCcore-10.2.0-20211004.151336.opAEN.log
+ERROR: Build of /global/common/software/nersc/easybuild/perlmutter/21.10/software/EasyBuild/4.4.2/easybuild/easyconfigs/g/GCCcore/GCCcore-10.2.0.eb failed (err: 'build failed (first 300 chars): Lock /global/common/software/nersc/easybuild/perlmutter/21.10/software/.locks/_global_common_software_nersc_easybuild_perlmutter_21.10_software_GCCcore_10.2.0.lock already exists, aborting!')
+```
+
+If you want to contribute easyconfigs, please contribute them in `easyconfigs` directory. You can copy easyconfigs using the `--copy-ec` option and specify path to directory. If you need to make any modification, please make them before contributing back.
+
+```
+siddiq90@login15> eb CP2K-8.1-foss-2020b.eb --copy-ec easyconfigs
+== Temporary log file in case of crash /tmp/eb-_tUiJO/easybuild-n0F_Uo.log
+== found valid index for /global/common/software/nersc/easybuild/perlmutter/21.10/software/EasyBuild/4.4.2/easybuild/easyconfigs, so using it...
+== found valid index for /global/common/software/nersc/easybuild/perlmutter/21.10/software/EasyBuild/4.4.2/easybuild/easyconfigs, so using it...
+/global/common/software/nersc/easybuild/perlmutter/21.10/software/EasyBuild/4.4.2/easybuild/easyconfigs/c/CP2K/CP2K-8.1-foss-2020b.eb copied to easyconfigs
+== Temporary log file(s) /tmp/eb-_tUiJO/easybuild-n0F_Uo.log* have been removed.
+```
+
+To install all easyconfigs just run the following
+
+```
+eb easyconfigs/* --robot
+```
+
 ## EasyBuild 101
 
 Easybuild makes use of **easyconfigs** which are configuration files to install packages. You can search for easyconfigs using `-S` option such as searching all M4 easyconfigs ``eb -S M4``. 
