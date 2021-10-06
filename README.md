@@ -34,10 +34,44 @@ To see a complete listing of easybuild configuration you can run the following
 eb --show-full-config
 ```
 
-Easybuild configuration can be defined in user setting `$HOME/.local/easybuild/config.cfg` however this won't work well in multi-system setup using a single account. For time being we will define the configuration
-using [setup.sh](https://software.nersc.gov/NERSC/easybuild/-/blob/main/setup.sh) script which can be sourced to setup the easybuild environment.
+The easybuild configuration for perlmutter is defined in [perlmutter.config](https://software.nersc.gov/NERSC/easybuild/-/blob/main/perlmutter.config). Upon cloning this repo, you have few ways to use this configuration file
 
-All easyconfig source files are stored in */global/common/software/nersc/easybuild/sources* we recommend there is a single source directory to avoid redundant copy of source tarballs. easybuild will fetch tarballs from mirrors defined in easyconfig. There is one sub-directory per letter followed by name of easybuild package as a sub-directory where corresponding tarballs will be stored. For instance `binutils` package will store its tarball in `b/binutils` directory. In the event you need to manually download a tarball because easybuild can't fetch from upstream such as proprietary software you should download and move the file in the corresponding directory.
+1. Copy the configuration to default location
+
+```
+mkdir -p $HOME/.config/easybuild/config.cfg
+cp perlmutter.config $HOME/.config/easybuild/config.cfg
+```
+
+2. Use via command line argument ``eb --configfiles /path/to/perlmutter.config``
+3. Use Environment variable ``EASYBUILD_CONFIGFILES=/path/to/perlmutter.config``
+
+In this example, we have set the environment variable to point to **perlmutter.config**, if its done correctly you should see configuration tuned 
+for perlmutter.
+
+```console
+siddiq90@login06> export EASYBUILD_CONFIGFILES=$HOME/software.nersc.gov/easybuild/perlmutter.config
+siddiq90@login06> eb --show-config
+#
+# Current EasyBuild configuration
+# (C: command line argument, D: default value, E: environment variable, F: configuration file)
+#
+buildpath          (F) = /global/common/software/nersc/easybuild/perlmutter/21.10/build
+configfiles        (E) = /global/homes/s/siddiq90/software.nersc.gov/easybuild/perlmutter.config
+containerpath      (F) = /global/common/software/nersc/easybuild/perlmutter/21.10/containers
+hide-deps          (F) = Bison, DB, expat, flex, gettext, groff, help2man, hypothesis, libarchive, libevent, libfabric, libffi, libiconv, Libint, libpciaccess, libreadline, libcx, libxml2, libxsmm, makeinfo, pybind11, xorg-macros
+installpath        (F) = /global/common/software/nersc/easybuild/perlmutter/21.10
+minimal-toolchains (F) = True
+packagepath        (F) = /global/common/software/nersc/easybuild/perlmutter/21.10/packages
+prefix             (F) = /global/common/software/nersc/easybuild/perlmutter/21.10
+repositorypath     (F) = /global/common/software/nersc/easybuild/perlmutter/21.10/ebfiles_repo
+robot-paths        (D) = /global/common/software/nersc/easybuild/perlmutter/21.10/software/EasyBuild/4.4.2/easybuild/easyconfigs
+sourcepath         (F) = /global/common/software/nersc/easybuild/sources
+```
+
+## Where does easybuild store tarballs
+
+All easyconfig source files are stored in **/global/common/software/nersc/easybuild/sources**, this is configured via **sourcepath** configuration parameter. We recommend there is a single source directory to avoid redundant copy of source tarballs. easybuild will fetch tarballs from mirrors defined in easyconfig. There is one sub-directory per letter followed by name of easybuild package as a sub-directory where corresponding tarballs will be stored. For instance `binutils` package will store its tarball in `b/binutils` directory. In the event you need to manually download a tarball because easybuild can't fetch from upstream such as proprietary software you should download and move the file in the corresponding directory.
 
 ```
 siddiq90@login12> ls /global/common/software/nersc/easybuild/sources
@@ -62,6 +96,7 @@ siddiq90@login15> eb easyconfigs/* --robot
 ERROR: Build of /global/common/software/nersc/easybuild/perlmutter/21.10/software/EasyBuild/4.4.2/easybuild/easyconfigs/g/GCCcore/GCCcore-10.2.0.eb failed (err: 'build failed (first 300 chars): Lock /global/common/software/nersc/easybuild/perlmutter/21.10/software/.locks/_global_common_software_nersc_easybuild_perlmutter_21.10_software_GCCcore_10.2.0.lock already exists, aborting!')
 ```
 
+## Copying Easyconfigs
 If you want to contribute easyconfigs, please contribute them in [easyconfigs](https://software.nersc.gov/NERSC/easybuild/-/tree/main/easyconfigs) directory. You can copy easyconfigs using the `--copy-ec` option and specify path to directory. If you need to make any modification, please make them before contributing back.
 
 ```
@@ -148,6 +183,8 @@ CFGS=/global/common/software/nersc/easybuild/perlmutter/21.10/software/EasyBuild
 == Temporary log file(s) /tmp/eb-C6dayA/easybuild-LE4e0h.log* have been removed.
 == Temporary directory /tmp/eb-C6dayA has been removed.
 ```
+
+The `eb -x` will show extended dry run output that can be useful for understanding how easybuild will build, install and generate modulefile.
 
 Easybuild won't install all dependencies by default you should run `--robot` to ensure eb will resolve all dependencies. Take for instance this example
 
@@ -361,7 +398,7 @@ List of known toolchains (toolchainname: module[,module...]):
 	xlompi: OpenMPI, xlc, xlf
 ```
 
-Let's assume you want to install bzip2-1.0.8 but there is no easyconfig however we see there is an easyconfig for 1.0.6
+Let's assume you want to install **bzip2-1.0.8.eb** but there is no easyconfig however we see there is an easyconfig for 1.0.6
 
 ```
 siddiq90@login12> eb bzip2-1.0.8.eb -D
@@ -426,7 +463,9 @@ siddiq90@login12> eb bzip2-1.0.6.eb --try-software-version=1.0.8
 == Temporary directory /tmp/eb-jADhY3 has been removed.
 ```
 
-To see content of a given easyconfig you can specify name of easyconfig and specify `--show-ec` option
+Similarly, you can tweak the toolchain name or toolchain version using `--try-toolchain-name`, `--try-toolchain-version`. 
+
+To see content of a given easyconfig you can specify name of easyconfig and use the `--show-ec` option
 
 ```console
 siddiq90@login12> eb bzip2-1.0.6.eb --show-ec
@@ -462,3 +501,144 @@ moduleclass = 'tools'
 == Temporary log file(s) /tmp/eb-rdibcU/easybuild-F7oCVS.log* have been removed.
 == Temporary directory /tmp/eb-rdibcU has been removed.
 ```
+
+If you want see all software provided by easybuild you can run the following. 
+
+```
+eb --list-software
+```
+
+The core implementation for software is implemented in python classes called easyblocks. The [easybuild-easyblocks](https://github.com/easybuilders/easybuild-easyblocks) repo contains all the easyblocks. You can see all the easyblocks via `eb --list-easyblocks`. The `eb -a` option can show all options for easyconfigs. Shown below are all easyconfig options
+
+```console
+siddiq90@login06> eb -a
+Available easyconfig parameters:
+
+MANDATORY
+---------
+description             A short description of the software [default: None]
+docurls                 List of urls with documentation of the software (not necessarily on homepage) [default: None]
+homepage                The homepage of the software [default: None]
+name                    Name of software [default: None]
+software_license        Software license [default: None]
+software_license_urls   List of software license locations [default: None]
+toolchain               Name and version of toolchain [default: None]
+version                 Version of software [default: None]
+
+TOOLCHAIN
+---------
+onlytcmod       Boolean/string to indicate if the toolchain should only load the environment with module (True) or also set all other variables (False) like compiler CC etc (if string: comma separated list of variables that will be ignored). [default: False]
+toolchainopts   Extra options for compilers [default: None]
+
+BUILD
+-----
+banned_linked_shared_libs     List of shared libraries (names, file names, or paths) which are not allowed to be linked in any installed binary/library [default: []]
+bin_lib_subdirs               List of subdirectories for binaries and libraries, which is used during sanity check to check RPATH linking and banned/required libraries [default: []]
+bitbucket_account             Bitbucket account name to be used to resolve template values in source URLs [default: "%(namelower)s"]
+buildopts                     Extra options passed to make step (default already has -j X) [default: ""]
+checksums                     Checksums for sources and patches [default: []]
+configopts                    Extra options passed to configure (default already has --prefix) [default: ""]
+cuda_compute_capabilities     List of CUDA compute capabilities to build with (if supported) [default: []]
+easyblock                     EasyBlock to use for building; if set to None, an easyblock is selected based on the software name [default: None]
+easybuild_version             EasyBuild-version this spec-file was written for [default: None]
+enhance_sanity_check          Indicate that additional sanity check commands & paths should enhance the existin sanity check, not replace it [default: False]
+fix_bash_shebang_for          List of files for which Bash shebang should be fixed to '#!/usr/bin/env bash' (glob patterns supported) [default: None]
+fix_perl_shebang_for          List of files for which Perl shebang should be fixed to '#!/usr/bin/env perl' (glob patterns supported) [default: None]
+fix_python_shebang_for        List of files for which Python shebang should be fixed to '#!/usr/bin/env python' (glob patterns supported) [default: None]
+github_account                GitHub account name to be used to resolve template values in source URLs [default: "%(namelower)s"]
+hidden                        Install module file as 'hidden' by prefixing its version with '.' [default: False]
+installopts                   Extra options for installation [default: ""]
+maxparallel                   Max degree of parallelism [default: None]
+parallel                      Degree of parallelism for e.g. make (default: based on the number of cores, active cpuset and restrictions in ulimit) [default: None]
+patches                       List of patches to apply [default: []]
+postinstallcmds               Commands to run after the install step. [default: []]
+prebuildopts                  Extra options pre-passed to build command. [default: ""]
+preconfigopts                 Extra options pre-passed to configure. [default: ""]
+preinstallopts                Extra prefix options for installation. [default: ""]
+pretestopts                   Extra prefix options for test. [default: ""]
+required_linked_shared_libs   List of shared libraries (names, file names, or paths) which must be linked in all installed binaries/libraries [default: []]
+runtest                       Indicates if a test should be run after make; should specify argument after make (for e.g.,"test" for make test) [default: None]
+sanity_check_commands         format: [(name, options)] e.g. [('gzip','-h')]. Using a non-tuple is equivalent to (name, '-h') [default: []]
+sanity_check_paths            List of files and directories to check (format: {'files':<list>, 'dirs':<list>}) [default: {}]
+skip                          Skip existing software [default: False]
+skipsteps                     Skip these steps [default: []]
+source_urls                   List of URLs for source files [default: []]
+sources                       List of source files [default: []]
+stop                          Keyword to halt the build process after a certain step. [default: None]
+testopts                      Extra options for test. [default: ""]
+tests                         List of test-scripts to run after install. A test script should return a non-zero exit status to fail [default: []]
+unpack_options                Extra options for unpacking source [default: ""]
+unwanted_env_vars             List of environment variables that shouldn't be set during build [default: []]
+versionprefix                 Additional prefix for software version (placed before version and toolchain name) [default: ""]
+versionsuffix                 Additional suffix for software version (placed after toolchain name) [default: ""]
+
+FILE-MANAGEMENT
+---------------
+buildininstalldir      Boolean to build (True) or not build (False) in the installation directory [default: False]
+cleanupoldbuild        Boolean to remove (True) or backup (False) the previous build directory with identical name or not. [default: True]
+cleanupoldinstall      Boolean to remove (True) or backup (False) the previous install directory with identical name or not. [default: True]
+dontcreateinstalldir   Boolean to create (False) or not create (True) the install directory [default: False]
+keeppreviousinstall    Boolean to keep the previous installation with identical name. Experts only! [default: False]
+keepsymlinks           Boolean to determine whether symlinks are to be kept during copying or if the content of the files pointed to should be copied [default: False]
+start_dir              Path to start the make in. If the path is absolute, use that path. If not, this is added to the guessed path. [default: None]
+
+DEPENDENCIES
+------------
+allow_system_deps         Allow listed system dependencies (format: (<name>, <version>)) [default: []]
+builddependencies         List of build dependencies [default: []]
+dependencies              List of dependencies [default: []]
+hiddendependencies        List of dependencies available as hidden modules [default: []]
+moddependpaths            Absolute path(s) to prepend to MODULEPATH before loading dependencies [default: None]
+multi_deps                Dict of lists of dependency versions over which to iterate [default: {}]
+multi_deps_load_default   Load module for first version listed in multi_deps by default [default: True]
+osdependencies            OS dependencies that should be present on the system [default: []]
+
+LICENSE
+-------
+accept_eula           Accepted End User License Agreement (EULA) for this software [default: False]
+group                 Name of the user group for which the software should be available; format: string or 2-tuple with group name + custom error for users outside group [default: None]
+key                   Key for installing software [default: None]
+license_file          License file for software [default: None]
+license_server        License server for software [default: None]
+license_server_port   Port for license server [default: None]
+
+EXTENSIONS
+----------
+exts_classmap            Map of extension name to class for handling build and installation. [default: {}]
+exts_default_options     List of default options for extensions [default: {}]
+exts_defaultclass        List of module for and name of the default extension class [default: None]
+exts_download_dep_fail   Fail if downloaded dependencies are detected for extensions [default: False]
+exts_filter              Extension filter details: template for cmd and input to cmd (templates for ext_name, ext_version and src). [default: None]
+exts_list                List with extensions added to the base installation [default: []]
+
+MODULES
+-------
+allow_prepend_abs_path       Allow specifying absolute paths to prepend in modextrapaths [default: False]
+citing                       Free-form text that describes how the software should be cited in publications [default: None]
+docpaths                     List of paths for documentation relative to installation directory [default: None]
+examples                     Free-form text with examples on using the software [default: None]
+include_modpath_extensions   Include $MODULEPATH extensions specified by module naming scheme. [default: True]
+modaliases                   Aliases to be defined in module file [default: {}]
+modaltsoftname               Module name to use (rather than using software name [default: None]
+modextrapaths                Extra paths to be prepended in module file [default: {}]
+modextravars                 Extra environment variables to be added to module file [default: {}]
+modloadmsg                   Message that should be printed when generated module is loaded [default: {}]
+modluafooter                 Footer to include in generated module file (Lua syntax) [default: ""]
+modtclfooter                 Footer to include in generated module file (Tcl syntax) [default: ""]
+module_depends_on            Use depends_on (Lmod 7.6.1+) for dependencies in generated module (implies recursive unloading of modules). [default: False]
+moduleclass                  Module class to be used for this software [default: "base"]
+moduleforceunload            Force unload of all modules when loading the extension [default: False]
+moduleloadnoconflict         Don't check for conflicts, unload other versions instead  [default: False]
+recursive_module_unload      Recursive unload of all dependencies when unloading module (True/False to hard enable/disable; None implies honoring the --recursive-module-unload EasyBuild configuration setting [default: None]
+site_contacts                String/list of strings with site contacts for the software [default: None]
+upstream_contacts            String/list of strings with upstream contact addresses (e.g., support e-mail, mailing list, bugtracker) [default: None]
+usage                        Usage instructions for the software [default: None]
+whatis                       List of brief (one line) description entries for the software [default: None]
+
+OTHER
+-----
+block        List of other 'block' sections on which this block depends (only relevant in easyconfigs with subblocks) [default: None]
+buildstats   A list of dicts with build statistics [default: None]
+deprecated   String specifying reason why this easyconfig file is deprecated and will be archived in the next major release of EasyBuild [default: False]
+```
+
