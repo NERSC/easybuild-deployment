@@ -37,7 +37,7 @@ eb --show-full-config
 Easybuild configuration can be defined in user setting `$HOME/.local/easybuild/config.cfg` however this won't work well in multi-system setup using a single account. For time being we will define the configuration
 using [setup.sh](https://software.nersc.gov/NERSC/easybuild/-/blob/main/setup.sh) script which can be sourced to setup the easybuild environment.
 
-All easyconfig source files are stored in `/global/common/software/nersc/easybuild/sources` we recommend all easybuild installs use a single source directory to avoid redundant copy of source tarballs. easybuild will fetch tarballs from mirrors defined in easyconfig. There is one subdirectory per letter and each easybuild package will be stored in the corresponding subdirectory. For instance `binutils` package will be in `b/binutils` directory
+All easyconfig source files are stored in */global/common/software/nersc/easybuild/sources* we recommend there is a single source directory to avoid redundant copy of source tarballs. easybuild will fetch tarballs from mirrors defined in easyconfig. There is one sub-directory per letter followed by name of easybuild package as a sub-directory where corresponding tarballs will be stored. For instance `binutils` package will store its tarball in `b/binutils` directory. In the event you need to manually download a tarball because easybuild can't fetch from upstream such as proprietary software you should download and move the file in the corresponding directory.
 
 ```
 siddiq90@login12> ls /global/common/software/nersc/easybuild/sources
@@ -62,7 +62,7 @@ siddiq90@login15> eb easyconfigs/* --robot
 ERROR: Build of /global/common/software/nersc/easybuild/perlmutter/21.10/software/EasyBuild/4.4.2/easybuild/easyconfigs/g/GCCcore/GCCcore-10.2.0.eb failed (err: 'build failed (first 300 chars): Lock /global/common/software/nersc/easybuild/perlmutter/21.10/software/.locks/_global_common_software_nersc_easybuild_perlmutter_21.10_software_GCCcore_10.2.0.lock already exists, aborting!')
 ```
 
-If you want to contribute easyconfigs, please contribute them in `easyconfigs` directory. You can copy easyconfigs using the `--copy-ec` option and specify path to directory. If you need to make any modification, please make them before contributing back.
+If you want to contribute easyconfigs, please contribute them in [easyconfigs](https://software.nersc.gov/NERSC/easybuild/-/tree/main/easyconfigs) directory. You can copy easyconfigs using the `--copy-ec` option and specify path to directory. If you need to make any modification, please make them before contributing back.
 
 ```
 siddiq90@login15> eb CP2K-8.1-foss-2020b.eb --copy-ec easyconfigs
@@ -121,7 +121,7 @@ siddiq90@login12> eb M4-1.4.19.eb
 == Temporary directory /tmp/eb-c4raYD has been removed.
 ```
 
-The `eb -D` will show dry run of all easyconfigs that will be installed. The `[x]` indicates packages already installed. 
+The `eb -D` will show dry run of all easyconfigs that will be installed. The `[x]` indicates package is already installed. 
 
 ```console
 siddiq90@login12> eb bzip2-1.0.8-GCCcore-10.3.0.eb -D
@@ -181,7 +181,7 @@ siddiq90@login12> eb M4-1.4.19.eb
 == Temporary directory /tmp/eb-1LiUHF has been removed.
 ```
 
-Easybuild will look at the current modules in your active MODULEPATH in this case our previous M4 installation is located in MODULEPATH
+Easybuild will look at the current modules in your active **MODULEPATH** in this case our previous M4 installation is located in the following location
 
 ```console
 siddiq90@login12> module av M4/1.4.19
@@ -196,7 +196,7 @@ Use "module spider" to find all possible modules and extensions.
 Use "module keyword key1 key2 ..." to search for all possible modules matching any of the "keys".
 ```
 
-If you want to rebuild the software please use the `--rebuild` and eb will rebuild the software from source
+If you want to rebuild the software, use the `--rebuild` and eb will rebuild the software from source
 
 ```console
 siddiq90@login12> eb M4-1.4.19.eb --rebuild
