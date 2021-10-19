@@ -18,7 +18,7 @@ sources = [SOURCELOWER_TAR_GZ]
 patches = ['%(name)s-%(version)s-use-doubles.patch']
 
 builddependencies = [
-    ('CMake', '3.11.4'),
+    ('CMake', '3.18.4'),
 ]
 
 configopts = [
