@@ -39,7 +39,7 @@ The easybuild configuration for perlmutter is defined in [perlmutter.config](htt
 1. Copy the configuration to default location
 
 ```
-mkdir -p $HOME/.config/easybuild/config.cfg
+mkdir -p $HOME/.config/easybuild
 cp perlmutter.config $HOME/.config/easybuild/config.cfg
 ```
 
