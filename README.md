@@ -122,15 +122,16 @@ Sometimes you want to rebuild the modulefiles without rebuilding the underlying 
 eb easyconfigs/* -r --module-only --rebuild
 ```
 
-This will rebuild all the modules without rebuilding the software. However sometimes you may have leftover modulefiles as part of broken builds. In this case there are some extra steps that needs to be done.
+This will rebuild all the modules without rebuilding the software. However sometimes you may have leftover modulefiles as part of broken builds. In this case there are some extra steps that needs to be done. First we need to move `Easybuild` modulefile out of directory and remove all modulefiles 
 
 ```
 cd /global/common/software/nersc/easybuild/perlmutter/21.10/modules/all
 mv Easybuild ..
-rm -rf /global/common/software/nersc/easybuild/perlmutter/21.10/modules/all
+rm -rf /global/common/software/nersc/easybuild/perlmutter/21.10/modules/all/*
+mv Easybuild /global/common/software/nersc/easybuild/perlmutter/21.10/modules/all/
 ```
 
-Next navigate to your root wherever you cloned this repo and then run the following
+Next navigate to your root wherever you cloned this repo and then run the following:
 
 ```
 eb easyconfigs/* -r --module-only --rebuild
@@ -168,4 +169,97 @@ siddiq90@login39> eb easyconfigs/* -r --module-only --rebuild
 == packaging [skipped]
 == COMPLETED: Installation ended successfully (took 5 secs)
 == Results of the build can be found in the log file(s) /global/common/software/nersc/easybuild/perlmutter/21.10/software/CUDAcore/11.1.1/easybuild/easybuild-CUDAcore-11.1.1-20211031.175734.log
+```
+
+## How to rebuild stack from source
+
+The software stack is installed in `/global/common/software/nersc/easybuild/perlmutter/21.10/software`, you can simply remove this entire directory
+tree and then rebuild the stack from source by running
+
+```
+eb easyconfigs/*.eb -r
+```
+
+Please take note of the umask before installing the stack, we want to make sure group `nstaff` has write access inorder to build in same stack. The umask should be the following. 
+
+```
+siddiq90@login39> umask
+0002
+```
+
+The umask setting is defined in easybuild configuration and should be the following
+
+```
+siddiq90@login39> eb --show-config | grep umask
+umask              (F) = 002
+```
+
+You can rebuild the existing software from source by running the following
+
+```
+eb easyconfigs/*.eb -r --rebuild --force
+```
+
+## Installing New Easybuild
+
+Each easybuild stack will be based on a fixed version of easybuild. New version of easybuild can be installed via following command
+
+```
+eb --install-latest-eb-release
+```
+
+
+For production, we should do something like this, let's assume we will build for Mar 2022, we will specify the `--prefix` path when installing easybuild
+
+```
+siddiq90@login39> eb --install-latest-eb-release --prefix=/global/common/software/nersc/easybuild/perlmutter/22.03
+== Temporary log file in case of crash /tmp/eb-jibbt155/easybuild-pkpadxgu.log
+== found valid index for /global/common/software/nersc/easybuild/perlmutter/21.10/software/EasyBuild/4.4.2/easybuild/easyconfigs, so using it...
+
+WARNING: Deprecated functionality, will no longer work in v5.0: Use of 'dummy' toolchain is deprecated, use 'system' toolchain instead; see http://easybuild.readthedocs.org/en/latest/Deprecated-functionality.html for more information
+
+== processing EasyBuild easyconfig /tmp/eb-jibbt155/tmpdod7to5k/easybuilders/easybuild-easyconfigs-develop/easybuild/easyconfigs/e/EasyBuild/EasyBuild-4.5.0.eb
+== building and installing EasyBuild/4.5.0...
+== fetching files...
+== creating build dir, resetting environment...
+== unpacking...
+c== ... (took 11 secs)
+== patching...
+== preparing...
+== configuring...
+== building...
+== testing...
+== installing...
+== ... (took 28 secs)
+== taking care of extensions...
+== restore after iterating...
+== postprocessing...
+== sanity checking...
+== ... (took 6 secs)
+== cleaning up...
+== ... (took 7 secs)
+== creating module...
+== ... (took 1 secs)
+== permissions...
+== ... (took 3 secs)
+== packaging...
+== COMPLETED: Installation ended successfully (took 1 min 1 secs)
+== Results of the build can be found in the log file(s) /global/common/software/nersc/easybuild/perlmutter/22.03/software/EasyBuild/4.5.0/easybuild/easybuild-EasyBuild-4.5.0-20211031.191453.log
+== Build succeeded for 1 out of 1
+== Temporary log file(s) /tmp/eb-jibbt155/easybuild-pkpadxgu.log* have been removed.
+== Temporary directory /tmp/eb-jibbt155 has been removed.
+
+```
+
+
+This will install a `Easybuild` modulefile which can be accessed by running. Note that Lmod automatically swapped to newer eb version 
+
+```
+siddiq90@login39> module use /global/common/software/nersc/easybuild/perlmutter/22.03/modules/all/
+
+The following have been reloaded with a version change:
+  1) EasyBuild/4.4.2 => EasyBuild/4.5.0
+
+siddiq90@login39> eb --version
+This is EasyBuild 4.5.0 (framework: 4.5.0, easyblocks: 4.5.0) on host login39.
 ```
