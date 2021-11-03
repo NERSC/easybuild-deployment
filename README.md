@@ -263,3 +263,13 @@ The following have been reloaded with a version change:
 siddiq90@login39> eb --version
 This is EasyBuild 4.5.0 (framework: 4.5.0, easyblocks: 4.5.0) on host login39.
 ```
+
+# References
+
+- Easybuild Documentation: https://easybuild.rtfd.io/
+- EasyBuild Home Page: https://easybuild.io/
+- Easybuild GitHub: https://github.com/easybuilders/easybuild
+- EasyBuild Slack: https://easybuild.slack.com/ or click [here](https://easybuild-slack.herokuapp.com/) to join
+- [Easybuild Tutorial ISC'21](https://easybuilders.github.io/easybuild-tutorial/files/EasyBuild-tutorial-ISC21-20210625.pdf)
+
+
