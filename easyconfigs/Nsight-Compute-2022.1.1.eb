@@ -1,10 +1,7 @@
-##
-# Author:    Robert Mijakovic <robert.mijakovic@lxp.lu>
-##
 easyblock = 'Binary'
 
 name = 'Nsight-Compute'
-version = '2022.1.0'
+version = '2022.1.1'
 
 homepage = 'https://developer.nvidia.com/nsight-compute'
 description = """NVIDIA® Nsight™ Compute is an interactive kernel profiler for CUDA applications. It provides detailed
@@ -17,8 +14,8 @@ application."""
 toolchain = SYSTEM
 
 # Download requires login https://developer.nvidia.com/gameworksdownload#?dn=nsight-compute-2021-2-0
-sources = ['%(namelower)s-linux-%(version)s.12-30763755.run']
-checksums = ['af4a24ec023aa812faf7fb93b6083ca3670c147e9a7b599873af26019dd3ceab']
+sources = ['%(namelower)s-linux-%(version)s.2-30914944.run']
+checksums = ['bae875391de5fb9ff7238b3c06fea5f77eff4afae9720e7021c90908d1f84081']
 
 install_cmd = 'sh ' + sources[0] + ' --target %(builddir)s --nox11 -- -noprompt --targetpath=%(installdir)s'
 
@@ -28,3 +25,4 @@ sanity_check_paths = {
 }
 
 moduleclass = 'tools'
+
