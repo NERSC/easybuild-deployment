@@ -1,7 +1,7 @@
 easyblock = 'Binary'
 
 name = 'Nsight-Systems'
-version = '2021.5.1'
+version = '2022.2.1'
 
 homepage = 'https://developer.nvidia.com/nsight-compute'
 description = """NVIDIA® Nsight™ Systems is a system-wide performance analysis tool designed to visualize an
@@ -10,9 +10,9 @@ any quantity of CPUs and GPUs in your computer; from laptops to DGX servers."""
 
 toolchain = SYSTEM
 
-# Download requires login https://developer.nvidia.com/gameworksdownload#?dn=nsight-systems-2020-5-1-85
-sources = ['NsightSystems-linux-public-%(version)s.118-f89f9cd.run']
-checksums = ['315951ce6902c3756e9de5c42e329f72576e0bfb2d5b12393ebf455ec6841a99']
+# Download requires login https://developer.nvidia.com/gameworksdownload#?dn=nsight-systems-2022-2-1
+sources = ['NsightSystems-linux-public-%(version)s.31-5fe97ab.run']
+checksums = ['01753300e6a418a4cb6104f11eb13961263ccaecc768f74801d261dab90e569a']
 
 install_cmd = 'sh ' + sources[0] + ' --target %(builddir)s --nox11 -- -noprompt --targetpath=%(installdir)s'
 
