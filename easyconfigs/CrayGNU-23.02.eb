@@ -1,0 +1,37 @@
+easyblock = 'CrayToolchain'
+
+name = 'CrayGNU'
+version = '23.02'
+
+homepage = 'https://pubs.cray.com/discover'
+description = """Toolchain using Cray compiler wrapper, using PrgEnv-gnu module
+(PE release: %s).\n""" % version
+
+toolchain = SYSTEM
+
+dependencies = [
+    # PrgEnv version is not pinned, as Cray recommends to use the latest
+    # (default) version
+    ('PrgEnv-gnu', EXTERNAL_MODULE),
+    # gcc versions later than 8 are not supported by cuda/10.1:
+    # -----------------   gcc/4   gcc/5   gcc/6   gcc/7   gcc/8   gcc/9
+    # cuda/09.2 < gcc/8   Y       Y       Y       Y       -       -
+    # cuda/10.0 < gcc/8   Y       Y       Y       Y       -       -
+    # cuda/10.1 < gcc/9   Y       Y       Y       Y       Y       -
+    # -----------------
+    ('gcc/11.2.0', EXTERNAL_MODULE),
+
+    ('craype/2.7.19', EXTERNAL_MODULE),
+    ('cray-libsci/23.02.1.1', EXTERNAL_MODULE),
+    ('cray-mpich/8.1.24', EXTERNAL_MODULE),
+    ('libfabric/1.15.2.0', EXTERNAL_MODULE),
+    ('cray-pmi/6.1.9', EXTERNAL_MODULE),
+]
+
+modluafooter = '''
+if not ( isloaded("craype-network-ofi") ) then
+    load("craype-network-ofi")
+end
+'''
+
+moduleclass = 'toolchain'
