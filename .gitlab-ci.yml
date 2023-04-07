@@ -1,0 +1,9 @@
+stage:
+    - deploy
+
+eb_setup:
+  tags: ["eb-perlmutter"]
+  stage: deploy
+  script:
+      - hostname
+      - whoami
