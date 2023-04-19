@@ -1,0 +1,68 @@
+# Built with EasyBuild version 4.7.1 on 2023-04-19_10-09-40
+name = 'binutils'
+version = '2.35'
+
+homepage = 'https://directory.fsf.org/project/binutils/'
+
+description = "binutils: GNU binary utilities"
+
+toolchain = SYSTEM
+
+source_urls = [GNU_SOURCE]
+# Due to a serious bug of the gold linker on PPC it was decided to use the 2.35.2 sources instead of a
+# (potentially large) patch. There are also some more or less minor fixes for ARM and (likely) x86 included.
+sources = ["%(name)s-%(version)s.2.tar.gz"]
+patches = ['binutils-2.34-readd-avx512-vmovd.patch']
+checksums = [
+    'f484f61c81aa679df84d358d9818d5bf3e71fd227303f234f72b24420d98d3cd',  # binutils-2.35.2.tar.gz
+    '45ecf7f5d198dd446d1a2e2a4d46b2747eb6fb8f2bfa18d7d42769e710e85716',  # binutils-2.34-readd-avx512-vmovd.patch
+]
+
+builddependencies = [
+    ('flex', '2.6.4'),
+    ('Bison', '3.8.2'),
+    # zlib required, but being linked in statically, so not a runtime dep
+    ('zlib', '1.2.11'),
+]
+
+# avoid build failure when makeinfo command is not available
+# see https://sourceware.org/bugzilla/show_bug.cgi?id=15345
+buildopts = 'MAKEINFO=true'
+installopts = buildopts
+
+# symlink libbfd-2.35.so to libbfd-2.35.2.so to avoid breaking binaries/libraries that resolved libbfd.so symlink;
+# likewise for libopcodes-2.35.so
+postinstallcmds = [
+    "cd %(installdir)s/lib && ln -s libbfd-%(version)s.2.so libbfd-%(version)s.so",
+    "cd %(installdir)s/lib && ln -s libopcodes-%(version)s.2.so libopcodes-%(version)s.so",
+]
+
+moduleclass = 'tools'
+
+# Build statistics
+buildstats = [{
+    "build_time": 119.04,
+    "command_line": ["--configfiles='/global/homes/s/siddiq90/gitrepos/easybuild-deployment/perlmutter.config'", "--hide-deps='APR-util,APR,ASE,binutils,Bison,Brotli,bzip2,Check,DB,Doxygen,expat,Flask,flex,fontconfig,freetype,gettext,groff,help2man,hypothesis,intltool,jbigkit,libarchive,libevent,libfabric,libffi,libiconv,Libint,libjpeg-turbo,libpciaccess,libpng,libreadline,LibTIFF,libtool,libvdwxc,libxc,libxml2,libxsmm,lz4,makeinfo,Meson,M4,ncurses,NASM,Ninja,OpenSSL,Pillow,pkg-config,pybind11,SCons,Serf,spglib-python,SQLite,Szip,Tk,Tkinter,utf8proc,UnZip,util-linux,X11,xorg-macros,zlib,zstd'", "--hide-toolchains='GCCcore,gompi,gompic'", '--minimal-toolchains', "--optarch='x86-milan'", "--repositorypath='/global/homes/s/siddiq90/gitrepos/easybuild-deployment,easyconfigs'", "--robot='/global/homes/s/siddiq90/gitrepos/easybuild-deployment/easyconfigs:/global/homes/s/siddiq90/.local/easybuild/software/EasyBuild/4.7.1/easybuild/easyconfigs'", "--robot-paths='/global/homes/s/siddiq90/gitrepos/easybuild-deployment/easyconfigs:'", "--search-paths='/global/homes/s/siddiq90/gitrepos/easybuild-deployment/easyconfigs'", "--sourcepath='/global/common/software/nersc/easybuild/sources'", "--try-toolchain='CrayGNU,23.02'", "--umask='002'", 'CMake-3.18.4-GCCcore-10.2.0.eb'],
+    "core_count": 256,
+    "cpu_arch": "x86_64",
+    "cpu_arch_name": "UNKNOWN",
+    "cpu_model": "AMD EPYC 7713 64-Core Processor",
+    "cpu_speed": 1996.328,
+    "cpu_vendor": "AMD",
+    "easybuild-easyblocks_version": "4.7.1",
+    "easybuild-framework_version": "4.7.1",
+    "gcc_version": "Using built-in specs.; COLLECT_GCC=/opt/cray/pe/gcc/11.2.0/bin/../snos/bin/gcc; COLLECT_LTO_WRAPPER=/opt/cray/pe/gcc/11.2.0/snos/libexec/gcc/x86_64-suse-linux/11.2.0/lto-wrapper; Target: x86_64-suse-linux; Configured with: ../cpe-gcc-11.2.0-202108140355.9bf1fd589a5c1/configure --prefix=/opt/cray/pe/gcc/11.2.0/snos --disable-nls --libdir=/opt/cray/pe/gcc/11.2.0/snos/lib --enable-languages=c,c++,fortran --with-gxx-include-dir=/opt/cray/pe/gcc/11.2.0/snos/include/g++ --with-slibdir=/opt/cray/pe/gcc/11.2.0/snos/lib --with-system-zlib --enable-shared --enable-__cxa_atexit --build=x86_64-suse-linux --with-ppl --with-cloog --disable-multilib; Thread model: posix; Supported LTO compression algorithms: zlib; gcc version 11.2.0 20210728 (Cray Inc.) (GCC) ; ",
+    "glibc_version": "2.31",
+    "hostname": "login19",
+    "install_size": 310536414,
+    "modules_tool": ('Lmod', '/opt/cray/pe/lmod/lmod/libexec/lmod', '8.7.15'),
+    "os_name": "SLES",
+    "os_type": "Linux",
+    "os_version": "15.4",
+    "platform_name": "x86_64-unknown-linux",
+    "python_version": "3.6.15 (default, Sep 23 2021, 15:41:43) [GCC]",
+    "system_gcc_path": "/opt/cray/pe/gcc/11.2.0/bin/gcc",
+    "system_python_path": "/usr/bin/python",
+    "timestamp": 1681924180,
+    "total_memory": 515213,
+}]

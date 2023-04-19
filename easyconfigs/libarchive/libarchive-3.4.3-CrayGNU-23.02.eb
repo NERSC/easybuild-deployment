@@ -1,0 +1,62 @@
+# Built with EasyBuild version 4.7.1 on 2023-04-19_10-23-53
+# Authors:: Jack Perdue <j-perdue@tamu.edu> - TAMU HPRC - https://hprc.tamu.edu
+
+easyblock = 'ConfigureMake'
+
+name = 'libarchive'
+version = '3.4.3'
+
+homepage = 'https://www.libarchive.org/'
+description = """
+ Multi-format archive and compression library
+"""
+
+toolchain = {'name': 'CrayGNU', 'version': '23.02'}
+
+source_urls = ['https://www.%(name)s.org/downloads/']
+sources = [SOURCE_TAR_GZ]
+checksums = ['ee1e749213c108cb60d53147f18c31a73d6717d7e3d2481c157e1b34c881ea39']
+
+builddependencies = [
+    ('binutils', '2.35'),
+]
+dependencies = [
+    ('zlib', '1.2.11'),
+    ('XZ', '5.2.5'),
+]
+
+
+sanity_check_paths = {
+    'files': ['include/archive.h', 'lib/%(name)s.so'],
+    'dirs': ['bin', 'share/man/man3'],
+}
+
+moduleclass = 'tools'
+
+# Build statistics
+buildstats = [{
+    "build_time": 53.37,
+    "command_line": ["--configfiles='/global/homes/s/siddiq90/gitrepos/easybuild-deployment/perlmutter.config'", "--hide-deps='APR-util,APR,ASE,binutils,Bison,Brotli,bzip2,Check,DB,Doxygen,expat,Flask,flex,fontconfig,freetype,gettext,groff,help2man,hypothesis,intltool,jbigkit,libarchive,libevent,libfabric,libffi,libiconv,Libint,libjpeg-turbo,libpciaccess,libpng,libreadline,LibTIFF,libtool,libvdwxc,libxc,libxml2,libxsmm,lz4,makeinfo,Meson,M4,ncurses,NASM,Ninja,OpenSSL,Pillow,pkg-config,pybind11,SCons,Serf,spglib-python,SQLite,Szip,Tk,Tkinter,utf8proc,UnZip,util-linux,X11,xorg-macros,zlib,zstd'", "--hide-toolchains='GCCcore,gompi,gompic'", '--minimal-toolchains', "--optarch='x86-milan'", "--repositorypath='/global/homes/s/siddiq90/gitrepos/easybuild-deployment,easyconfigs'", "--robot='/global/homes/s/siddiq90/gitrepos/easybuild-deployment/easyconfigs:/global/homes/s/siddiq90/.local/easybuild/software/EasyBuild/4.7.1/easybuild/easyconfigs'", "--robot-paths='/global/homes/s/siddiq90/gitrepos/easybuild-deployment/easyconfigs:'", "--search-paths='/global/homes/s/siddiq90/gitrepos/easybuild-deployment/easyconfigs'", "--sourcepath='/global/common/software/nersc/easybuild/sources'", "--try-toolchain='CrayGNU,23.02'", "--umask='002'", 'CMake-3.18.4-GCCcore-10.2.0.eb'],
+    "core_count": 256,
+    "cpu_arch": "x86_64",
+    "cpu_arch_name": "UNKNOWN",
+    "cpu_model": "AMD EPYC 7713 64-Core Processor",
+    "cpu_speed": 1996.328,
+    "cpu_vendor": "AMD",
+    "easybuild-easyblocks_version": "4.7.1",
+    "easybuild-framework_version": "4.7.1",
+    "gcc_version": "Using built-in specs.; COLLECT_GCC=/opt/cray/pe/gcc/11.2.0/bin/../snos/bin/gcc; COLLECT_LTO_WRAPPER=/opt/cray/pe/gcc/11.2.0/snos/libexec/gcc/x86_64-suse-linux/11.2.0/lto-wrapper; Target: x86_64-suse-linux; Configured with: ../cpe-gcc-11.2.0-202108140355.9bf1fd589a5c1/configure --prefix=/opt/cray/pe/gcc/11.2.0/snos --disable-nls --libdir=/opt/cray/pe/gcc/11.2.0/snos/lib --enable-languages=c,c++,fortran --with-gxx-include-dir=/opt/cray/pe/gcc/11.2.0/snos/include/g++ --with-slibdir=/opt/cray/pe/gcc/11.2.0/snos/lib --with-system-zlib --enable-shared --enable-__cxa_atexit --build=x86_64-suse-linux --with-ppl --with-cloog --disable-multilib; Thread model: posix; Supported LTO compression algorithms: zlib; gcc version 11.2.0 20210728 (Cray Inc.) (GCC) ; ",
+    "glibc_version": "2.31",
+    "hostname": "login19",
+    "install_size": 6556629,
+    "modules_tool": ('Lmod', '/opt/cray/pe/lmod/lmod/libexec/lmod', '8.7.15'),
+    "os_name": "SLES",
+    "os_type": "Linux",
+    "os_version": "15.4",
+    "platform_name": "x86_64-unknown-linux",
+    "python_version": "3.6.15 (default, Sep 23 2021, 15:41:43) [GCC]",
+    "system_gcc_path": "/opt/cray/pe/gcc/11.2.0/bin/gcc",
+    "system_python_path": "/usr/bin/python",
+    "timestamp": 1681925032,
+    "total_memory": 515213,
+}]

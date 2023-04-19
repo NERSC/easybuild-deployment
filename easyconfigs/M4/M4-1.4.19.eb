@@ -1,0 +1,60 @@
+# Built with EasyBuild version 4.7.1 on 2023-04-19_10-06-55
+easyblock = 'ConfigureMake'
+
+name = 'M4'
+version = '1.4.19'
+
+homepage = 'https://www.gnu.org/software/m4/m4.html'
+
+description = """
+ GNU M4 is an implementation of the traditional Unix macro processor. It is
+ mostly SVR4 compatible although it has some extensions (for example, handling
+ more than 9 positional parameters to macros). GNU M4 also has built-in
+ functions for including files, running shell commands, doing arithmetic, etc.
+"""
+
+toolchain = SYSTEM
+
+source_urls = [GNU_SOURCE]
+sources = [SOURCELOWER_TAR_GZ]
+
+checksums = ['3be4a26d825ffdfda52a56fc43246456989a3630093cced3fbddf4771ee58a70']
+
+# '-fgnu89-inline' is required to avoid linking errors with older glibc's,
+# see https://github.com/easybuilders/easybuild-easyconfigs/issues/529
+configopts = "--enable-c++ CPPFLAGS=-fgnu89-inline"
+
+sanity_check_paths = {
+    'files': ['bin/m4'],
+    'dirs': [],
+}
+
+moduleclass = 'devel'
+
+# Build statistics
+buildstats = [{
+    "build_time": 37.66,
+    "command_line": ["--configfiles='/global/homes/s/siddiq90/gitrepos/easybuild-deployment/perlmutter.config'", "--hide-deps='APR-util,APR,ASE,binutils,Bison,Brotli,bzip2,Check,DB,Doxygen,expat,Flask,flex,fontconfig,freetype,gettext,groff,help2man,hypothesis,intltool,jbigkit,libarchive,libevent,libfabric,libffi,libiconv,Libint,libjpeg-turbo,libpciaccess,libpng,libreadline,LibTIFF,libtool,libvdwxc,libxc,libxml2,libxsmm,lz4,makeinfo,Meson,M4,ncurses,NASM,Ninja,OpenSSL,Pillow,pkg-config,pybind11,SCons,Serf,spglib-python,SQLite,Szip,Tk,Tkinter,utf8proc,UnZip,util-linux,X11,xorg-macros,zlib,zstd'", "--hide-toolchains='GCCcore,gompi,gompic'", '--minimal-toolchains', "--optarch='x86-milan'", "--repositorypath='/global/homes/s/siddiq90/gitrepos/easybuild-deployment,easyconfigs'", "--robot='/global/homes/s/siddiq90/gitrepos/easybuild-deployment/easyconfigs:/global/homes/s/siddiq90/.local/easybuild/software/EasyBuild/4.7.1/easybuild/easyconfigs'", "--robot-paths='/global/homes/s/siddiq90/gitrepos/easybuild-deployment/easyconfigs:'", "--search-paths='/global/homes/s/siddiq90/gitrepos/easybuild-deployment/easyconfigs'", "--sourcepath='/global/common/software/nersc/easybuild/sources'", "--try-toolchain='CrayGNU,23.02'", "--umask='002'", 'CMake-3.18.4-GCCcore-10.2.0.eb'],
+    "core_count": 256,
+    "cpu_arch": "x86_64",
+    "cpu_arch_name": "UNKNOWN",
+    "cpu_model": "AMD EPYC 7713 64-Core Processor",
+    "cpu_speed": 1996.328,
+    "cpu_vendor": "AMD",
+    "easybuild-easyblocks_version": "4.7.1",
+    "easybuild-framework_version": "4.7.1",
+    "gcc_version": "Using built-in specs.; COLLECT_GCC=/opt/cray/pe/gcc/11.2.0/bin/../snos/bin/gcc; COLLECT_LTO_WRAPPER=/opt/cray/pe/gcc/11.2.0/snos/libexec/gcc/x86_64-suse-linux/11.2.0/lto-wrapper; Target: x86_64-suse-linux; Configured with: ../cpe-gcc-11.2.0-202108140355.9bf1fd589a5c1/configure --prefix=/opt/cray/pe/gcc/11.2.0/snos --disable-nls --libdir=/opt/cray/pe/gcc/11.2.0/snos/lib --enable-languages=c,c++,fortran --with-gxx-include-dir=/opt/cray/pe/gcc/11.2.0/snos/include/g++ --with-slibdir=/opt/cray/pe/gcc/11.2.0/snos/lib --with-system-zlib --enable-shared --enable-__cxa_atexit --build=x86_64-suse-linux --with-ppl --with-cloog --disable-multilib; Thread model: posix; Supported LTO compression algorithms: zlib; gcc version 11.2.0 20210728 (Cray Inc.) (GCC) ; ",
+    "glibc_version": "2.31",
+    "hostname": "login19",
+    "install_size": 1640225,
+    "modules_tool": ('Lmod', '/opt/cray/pe/lmod/lmod/libexec/lmod', '8.7.15'),
+    "os_name": "SLES",
+    "os_type": "Linux",
+    "os_version": "15.4",
+    "platform_name": "x86_64-unknown-linux",
+    "python_version": "3.6.15 (default, Sep 23 2021, 15:41:43) [GCC]",
+    "system_gcc_path": "/opt/cray/pe/gcc/11.2.0/bin/gcc",
+    "system_python_path": "/usr/bin/python",
+    "timestamp": 1681924015,
+    "total_memory": 515213,
+}]
