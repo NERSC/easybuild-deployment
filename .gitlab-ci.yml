@@ -5,5 +5,9 @@ eb_setup:
   tags: ["eb-perlmutter"]
   stage: deploy
   script:
-    - hostname
-    - whoami
+    - module use $HOME/.local/easybuild/modules/all
+    - ml EasyBuild
+    - eb --version
+    - source setup.sh
+    - eb --show-config
+    - eb easyconfigs/* --robot -D --prefix=$CI_PROJECT_DIR/easybuild_stage
