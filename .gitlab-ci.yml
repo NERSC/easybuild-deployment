@@ -1,13 +1,24 @@
 stages:
+    - test
     - deploy
 
-eb_setup:
+.setup_eb: &setup_eb
+    - module use $HOME/.local/easybuild/modules/all
+    - ml EasyBuild
+    - source setup.sh
+    - eb --show-config
+
+eb_dryrun:
   tags: ["eb-perlmutter"]
   stage: deploy
   script:
-    - module use $HOME/.local/easybuild/modules/all
-    - ml EasyBuild
-    - eb --version
-    - source setup.sh
-    - eb --show-config
-    - eb easyconfigs/* --robot -D --prefix=$CI_PROJECT_DIR/easybuild_stage
+    - *setup_eb
+    - eb easyconfigs/* -D --robot --prefix=$CI_PROJECT_DIR/easybuild_stage
+
+eb_install:
+  tags: ["eb-perlmutter"]
+  stage: deploy
+  needs: [eb_dryrun]
+  script:
+    - *setup_eb
+    - eb easyconfigs/* --robot --prefix=$CI_PROJECT_DIR/easybuild_stage
