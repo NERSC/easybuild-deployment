@@ -1,5 +1,5 @@
 variables:
-  - eb_stack_version: 23.05
+  eb_stack_version: 23.05
 stages:
     - test
     - build
