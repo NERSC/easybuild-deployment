@@ -30,6 +30,7 @@ eb_install:
 approve:
   tags: ["eb-perlmutter"]
   stage: approve
+  when: manual
   script:
     - echo Approval Granted, we will commence execution of production pipeline
 
