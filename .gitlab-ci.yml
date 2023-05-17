@@ -1,5 +1,9 @@
+variables:
+  - eb_stack_version: 23.05
 stages:
     - test
+    - build
+    - approve
     - deploy
 
 .setup_eb: &setup_eb
@@ -10,15 +14,30 @@ stages:
 
 eb_dryrun:
   tags: ["eb-perlmutter"]
-  stage: deploy
+  stage: test
   script:
     - *setup_eb
     - eb easyconfigs/* -D --robot --prefix=$CI_PROJECT_DIR/easybuild_stage
 
 eb_install:
   tags: ["eb-perlmutter"]
-  stage: deploy
+  stage: build
   needs: [eb_dryrun]
   script:
     - *setup_eb
     - eb easyconfigs/* --robot --prefix=$CI_PROJECT_DIR/easybuild_stage
+
+approve:
+  tags: ["eb-perlmutter"]
+  stage: approve
+  script:
+    - echo Approval Granted, we will commence execution of production pipeline
+
+eb_prod:
+   tags: ["eb-perlmutter"]
+   stage: deploy
+   needs: [approve]
+   script:
+     -  *setup_eb
+     - eb easyconfigs/* --robot --prefix=/global/common/software/spackecp/perlmutter/easybuild/${eb_stack_version}/${CI_PIPELINE_ID}
+
